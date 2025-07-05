@@ -1,6 +1,20 @@
 Instruções como abrir o contrato de API
 
+Existem duas maneiras:
+
+1. Usando a ferramenta online Swagger Editor (https://editor.swagger.io/), que e muito pratico para visualizar o contrato-de-api.
+2. Rodando o visualizador de open api localmente, voce consegue visualizar o contrato de api e usa-la no front-end.
+
+Ferramenta online Swagger Editor
+---
+1. Abra o site: https://editor.swagger.io/
+2. No editor online carregue o arquivo usando a opcao File -> Import URL, digite https://github.com/flauberjp/alitem/blob/main/contrato-de-api/openapi.yaml e clique OK. 
+
+
+Visualizador de open api localmente
+---
   * Pre-requisito: ter o docker instalado e rodando.
+
 
 1. Clonar o repositorio Git: https://github.com/flauberjp/alitem.git 
 1.1. Arquivos usados são (localizados na pasta contrato-de-api): docker-compose.yaml, openapi-config.yaml e openapi.yaml;
