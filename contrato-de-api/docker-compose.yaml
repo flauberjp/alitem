@@ -3,7 +3,7 @@
       mock-server:
         image: outofcoffee/imposter-openapi:latest # Example using Imposter
         volumes:
-          - "C:/Users/Vera/Documents/open-api:/opt/imposter/config"
+          - "C:/Users/Vera/Documents/alitem/contrato-de-api:/opt/imposter/config"
         ports:
           - "8080:8080" # Mock server port
 

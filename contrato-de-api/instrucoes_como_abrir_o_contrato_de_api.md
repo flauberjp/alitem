@@ -1,10 +1,11 @@
-consegui rodar localmente o contrato de API, aqui ta o bizu:
+Instruções como abrir o contrato de API
 
-  * pre-requisito: ter o docker instalado e rodando.
+  * Pre-requisito: ter o docker instalado e rodando.
 
-1. descompactar o arquivo alitem.zip, no diretório ‘alitem’ dentro do home do usuário, por exemplo: /Users/Flaviano.Marinho/Projects/alitem. Arquivos usados são: docker-compose.yaml, openapi-config.yaml e openapi.yaml;
-2. ⁠Ajustar no arquivo docker-compose.yaml o volume usado pelo serviço mock-server, por exemplo, mudar de ‘/Users/Flaviano.Marinho/Projects/alitem’ para ‘/alitem’ (caso tenha extraido o .zip para a pasta raiz do seu computador); 
-3. ⁠⁠rodar o docker-compose.yaml file com o comando: docker-compose up
+1. Clonar o repositorio Git: https://github.com/flauberjp/alitem.git 
+1.1. Arquivos usados são (localizados na pasta contrato-de-api): docker-compose.yaml, openapi-config.yaml e openapi.yaml;
+2. ⁠Ajustar no arquivo docker-compose.yaml o volume usado pelo serviço mock-server, por exemplo, mudar de ‘C:/Users/Vera/Documents/alitem/contrato-de-api’ para ‘C:/alitem’, caso tenha clonado o projeto para o razi do seu computador(assumindo voce esta usando uma maquina windows); 
+3. ⁠Rodar o docker-compose.yaml file com o comando, onde dentro do diretorio contrato-de-api voce digita o comando: docker-compose up
 4. ⁠⁠⁠Acessar o contrato no link: http://localhost:8080/_spec/#/
 5. ⁠⁠⁠Acessar exemplo de endpoint no link: http://localhost:8080/v1/inicio
 
