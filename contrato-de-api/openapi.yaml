@@ -1,0 +1,386 @@
+#
+# Especificação da API AliTem no formato OpenAPI 3.0
+# Versão: 1.0.1
+# Descrição: Esta é a primeira versão da API para o aplicativo AliTem,
+# um serviço de delivery semelhante ao iFood. Focada nas funcionalidades
+# essenciais para as telas iniciais e de perfil de usuário.
+# Identificadores e modelos de dados em Português do Brasil.
+#
+openapi: 3.0.3
+info:
+  title: API AliTem
+  description: |-
+    API para o aplicativo de delivery "AliTem".
+    Esta especificação cobre as funcionalidades essenciais como visualização de lojas,
+    produtos, categorias e gerenciamento de dados de usuário.
+  version: 1.0.1
+servers:
+  - url: https://api.alitem.com.br/v1
+    description: Servidor de Produção
+  - url: http://localhost:3000/v1
+    description: Servidor de Desenvolvimento
+
+#
+# Tags para agrupar os endpoints na documentação
+#
+tags:
+  - name: Vitrine
+    description: Operações relacionadas à tela principal (início)
+  - name: Usuário
+    description: Operações para gerenciamento de dados do usuário
+  - name: Carrinho
+    description: Operações relacionadas ao carrinho de compras
+
+#
+# Definição dos Endpoints (Caminhos da API)
+#
+paths:
+  # Endpoint para carregar os dados da tela inicial
+  /inicio:
+    get:
+      tags:
+        - Vitrine
+      summary: Retorna os dados para a tela inicial
+      description: Busca e retorna uma lista de categorias, lojas em destaque e produtos populares para compor a tela principal do app.
+      responses:
+        '200':
+          description: Sucesso ao obter dados da tela inicial.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensagemBoasVindas:
+                    type: string
+                    example: "Bem-vinda, Liana! :)"
+                  categorias:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Categoria'
+                  lojas:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Loja'
+                  produtos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Produto'
+
+  # Endpoint para buscar produtos
+  /produtos:
+    get:
+      tags:
+        - Vitrine
+      summary: Lista ou busca produtos
+      description: Retorna uma lista de produtos. Pode ser filtrada por uma query de busca de texto livre ou por categoria.
+      parameters:
+        - name: q
+          in: query
+          description: Termo de busca para nome ou descrição do produto.
+          required: false
+          schema:
+            type: string
+        - name: categoriaId
+          in: query
+          description: ID da categoria para filtrar os produtos.
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de produtos encontrada.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Produto'
+
+  # Endpoint para os dados do usuário
+  /usuario/me:
+    get:
+      tags:
+        - Usuário
+      summary: Retorna os dados do usuário logado
+      description: Busca e retorna os dados pessoais e de credenciais do usuário autenticado.
+      responses:
+        '200':
+          description: Dados do usuário retornados com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '401':
+          description: Não autorizado. O usuário precisa estar logado.
+    put:
+      tags:
+        - Usuário
+      summary: Atualiza os dados do usuário logado
+      description: Permite a atualização do nome, CPF, email ou celular do usuário.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioAtualizacao'
+      responses:
+        '200':
+          description: Dados atualizados com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '400':
+          description: Dados inválidos fornecidos.
+
+  # Endpoint para os endereços do usuário
+  /usuario/me/enderecos:
+    get:
+      tags:
+        - Usuário
+      summary: Lista os endereços do usuário
+      description: Retorna la lista de endereços cadastrados para o usuário logado.
+      responses:
+        '200':
+          description: Lista de endereços.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Endereco'
+    post:
+      tags:
+        - Usuário
+      summary: Adiciona um novo endereço
+      description: Cadastra um novo endereço para o usuário logado.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Endereco'
+      responses:
+        '201':
+          description: Endereço criado com sucesso.
+
+  # Endpoint para buscar endereço por CEP
+  /localizacao/cep/{cep}:
+    get:
+      tags:
+        - Usuário
+      summary: Busca endereço por CEP
+      description: Consulta um serviço externo para obter os dados de um endereço a partir do CEP.
+      parameters:
+        - name: cep
+          in: path
+          description: CEP a ser consultado (apenas números).
+          required: true
+          schema:
+            type: string
+            example: "58038100"
+      responses:
+        '200':
+          description: Endereço encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  logradouro:
+                    type: string
+                    example: "Avenida General Edson Ramalho"
+                  bairro:
+                    type: string
+                    example: "Manaíra"
+                  cidade:
+                    type: string
+                    example: "João Pessoa"
+                  estado:
+                    type: string
+                    example: "PB"
+
+  # Endpoint para o carrinho de compras
+  /carrinho:
+    get:
+      tags:
+        - Carrinho
+      summary: Visualiza o carrinho de compras
+      description: Retorna os itens presentes no carrinho do usuário.
+      responses:
+        '200':
+          description: Itens do carrinho.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Carrinho'
+    post:
+      tags:
+        - Carrinho
+      summary: Adiciona um item ao carrinho
+      description: Adiciona um produto e sua quantidade ao carrinho de compras.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                produtoId:
+                  type: string
+                  example: "prod_12345"
+                quantidade:
+                  type: integer
+                  example: 1
+      responses:
+        '200':
+          description: Item adicionado, retorna o carrinho atualizado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Carrinho'
+
+#
+# Componentes Reutilizáveis (Modelos de Dados)
+#
+components:
+  schemas:
+    Categoria:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "cat_games"
+        nome:
+          type: string
+          example: "Games"
+        urlIcone:
+          type: string
+          format: uri
+          example: "https://cdn.alitem.com/icons/games.svg"
+
+    Loja:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "store_abc"
+        nome:
+          type: string
+          example: "Nome da Loja"
+        status:
+          type: string
+          example: "Aberta agora"
+        avaliacao:
+          type: number
+          format: float
+          example: 4.5
+        urlLogo:
+          type: string
+          format: uri
+          example: "https://cdn.alitem.com/logos/store_abc.png"
+
+    Produto:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "prod_12345"
+        nome:
+          type: string
+          example: "Título do produto"
+        descricao:
+          type: string
+          example: "Detalhes do produto"
+        preco:
+          type: number
+          format: float
+          example: 42.90
+        urlImagem:
+          type: string
+          format: uri
+          example: "https://cdn.alitem.com/products/prod_12345.png"
+
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "user_xyz"
+        nomeCompleto:
+          type: string
+          example: "Liana da Silva"
+        cpf:
+          type: string
+          example: "123.456.789-00"
+        email:
+          type: string
+          format: email
+          example: "liana.silva@email.com"
+        celular:
+          type: string
+          example: "83999998888"
+
+    UsuarioAtualizacao:
+      type: object
+      description: Campos que podem ser atualizados pelo usuário.
+      properties:
+        nomeCompleto:
+          type: string
+          example: "Liana da Silva"
+        cpf:
+          type: string
+          example: "123.456.789-00"
+        email:
+          type: string
+          format: email
+          example: "liana.silva@email.com"
+        celular:
+          type: string
+          example: "83999998888"
+
+    Endereco:
+      type: object
+      properties:
+        cep:
+          type: string
+          example: "58038100"
+        logradouro:
+          type: string
+          example: "Avenida General Edson Ramalho"
+        numero:
+          type: string
+          example: "1024"
+        complemento:
+          type: string
+          example: "Apto 302"
+        bairro:
+          type: string
+          example: "Manaíra"
+        cidade:
+          type: string
+          example: "João Pessoa"
+        estado:
+          type: string
+          example: "PB"
+
+    ItemCarrinho:
+      type: object
+      properties:
+        produto:
+          $ref: '#/components/schemas/Produto'
+        quantidade:
+          type: integer
+          example: 2
+
+    Carrinho:
+      type: object
+      properties:
+        itens:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemCarrinho'
+        total:
+          type: number
+          format: float
+          example: 85.80

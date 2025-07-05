@@ -1,0 +1,15 @@
+    # docker-compose.yaml
+    services:
+      mock-server:
+        image: outofcoffee/imposter-openapi:latest # Example using Imposter
+        volumes:
+          - "C:/Users/Vera/Documents/open-api:/opt/imposter/config"
+        ports:
+          - "8080:8080" # Mock server port
+
+      swagger-ui:
+        image: swaggerapi/swagger-ui:latest
+        environment:
+          SWAGGER_JSON_URL: http://mock-server:8080/_spec/openapi.yaml # Points to the mock server's spec
+        ports:
+          - "80:8080" # Swagger UI accessible on port 80
