@@ -29,3 +29,4 @@ Referência:
 1. Buscar no google por “Build a mock REST API with Swagger UI using OPEN API Specification and Docker.”, o gemini vai dizer como fazer. De todo jeito aqui tem um link com mais detalhes: “https://nuvolar.medium.com/build-a-mock-rest-api-with-swagger-ui-using-open-api-specification-and-docker-4665b53b8d85”
 2. https://hub.docker.com/r/outofcoffee/imposter-openapi
 3. Volume binding using docker compose on Windows - https://stackoverflow.com/questions/41334021/volume-binding-using-docker-compose-on-windows
+4. [OpenAPI Specifications](https://www.openapis.org/)
