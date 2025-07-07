@@ -9,6 +9,7 @@ Ferramenta online Swagger Editor
 ---
 1. Abra o site: https://editor.swagger.io/
 2. No editor online carregue o arquivo usando a opcao File -> Import URL, digite https://github.com/flauberjp/alitem/blob/main/contrato-de-api/openapi.yaml e clique OK. 
+2.1. Caso a acao acima nao funcione(parece ser um bug desse editor), experimente fazer o download do arquivo https://github.com/flauberjp/alitem/blob/main/contrato-de-api/openapi.yaml e usando a opcao File->Import File, aponte para o arquivo que você baixou.
 
 
 Visualizador de open api localmente
